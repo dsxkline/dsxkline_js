@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <!-- 不允许放大缩小 -->
+    <meta name="viewport" content = "width=device-width,height=device-height,initial-scale=1.0,user-scalable=no">
+    <title>大师兄K线图</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            -webkit-touch-callout:none; /*系统默认菜单被禁用*/
+            -webkit-user-select:none; /*webkit浏览器*/
+            -moz-user-select:none;/*火狐*/
+            -ms-user-select:none; /*IE10*/
+            user-select:none;
+            font-family:"微软雅黑";
+        }
+     
+        body{
+            background-color: #fff;
+        }
+        .green {
+            color: "green";
+        }
+        .red{
+            color: "red";
+        }
+        .tab{
+            overflow: hidden;
+            clear: both;
+            height: 35px;
+            width: 100%;
+            border-top: 1px solid #eeeeee;
+            border-bottom: 1px solid #eeeeee;
+        }
+        .tab li{
+            float: left;
+            list-style: none;
+            width: 16.6%;
+            height: 35px;
+            line-height: 35px;
+            text-align: center;
+            
+        }
+        .newtab li{
+            float: left;
+            list-style: none;
+            width: 20%;
+            height: 35px;
+            line-height: 35px;
+            text-align: center;
+        }
+        .list li{
+            overflow: hidden;
+            padding: 10px;
+            border-bottom: 1px solid #eeeeee;
+        }
+        .list .listitem .itemimage image{
+            float: left;
+        }
+        .list .listitem .itemimage span{
+            font-size: 12px;
+            color: #666;
+        }
+        .list .listitem p{
+            padding: 10px 0;
+        }
+        .main{
+            max-width: 1000px;
+            margin: 0 auto;
+            /* height: 100%; */
+            /* overflow: hidden; */
+        }
+        .navbar{
+            padding: 5px 0;
+            overflow: hidden;
+            text-align: center;
+            font-size: 18px;
+            line-height: 18px;
+            border-bottom: 1px solid #eeeeee;
+        }
+        .navbar b{
+            display: block;
+        }
+        .navbar span{
+            font-size: 10px;
+            line-height: 10px;
+            color: #666;
+        }
+        .head{
+            overflow: hidden;
+            padding: 5px 10px 5px 10px;
+        }
+        .head .title{
+            padding-bottom: 5px;
+        }
+        .head .title span:last-child{
+            font-size: 15px;
+        }
+        .big{
+            font-size: 35px;
+            line-height: 35px;
+            padding-right: 10px;
+            font-weight: bold;
+        }
+        .head .intro ul li{
+            float: left;
+            width: 25%;
+            list-style: none;
+            font-size: 12px;
+            padding-bottom: 2px;
+        }
+        .head .intro ul li span{
+            color: #666;
+            padding-right: 5px;
+        }
+        .head .intro ul li b{
+            color: #666;
+           font-weight: normal;
+        }
+        .klinebox{
+            /* width: 100%; */
+            height: 400px;
+            clear: both;
+            overflow: hidden;
+            /* border-left: 1px solid #eeeeee;
+            border-right: 1px solid #eeeeee; */
+        }
+    </style>
+    <script src="dist/dsx.kline.js?v=1032333"></script>
+    <script src="dist/qq.hq.js"></script>
+  </head>
+  <body>
+    
+
+    <div class="main">
+        <div class="navbar"><b>-</b><span>-</span></div>
+        <div class="head">
+            <div class="title"><span class="big price">-</span><span class="changeRatio">-</span></div>
+            <div class="intro">
+                <ul>
+
+                    <li class="open"><span>开</span><b></b></li>
+                    <li class="lastClose"><span>昨收</span><b></b></li>
+                    <li class="vol"><span>总手</span><b></b></li>
+                    <li class="volAmount"><span>金额</span><b></b></li>
+
+                    <li class="high"><span>高</span><b></b></li>
+                    <li class="turnoverRate"><span>换手</span><b></b></li>
+                    <li class="swing"><span>振幅</span><b></b></li>
+                    <li class="peRatio"><span>市盈</span><b></b></li>
+                    
+                    <li class="low"><span>低</span><b></b></li>
+                    <li class="cityNetRate"><span>市净</span><b></b></li>
+                    <li class="totalValue"><span>市值</span><b></b></li>
+                    <li class="circulationValue"><span>流通</span><b></b></li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab">
+            <ul>
+                <li onclick="tab(0)">分时</li>
+                <li onclick="tab(1)">五日</li>
+                <li onclick="tab(2)">日K</li>
+                <li onclick="tab(3)">周K</li>
+                <li onclick="tab(4)">月K</li>
+                <li onclick="tab(5)">分钟</li>
+            </ul>
+            
+        </div>
+        <div class="klinebox">
+            <div id="kline" style="display: block;"></div>
+        </div>
+
+        <div class="tab newtab">
+            <ul>
+                <li>资讯</li>
+                <li>成分股</li>
+                <li>异动</li>
+                <li>公告</li>
+                <li>相关ETF</li>
+            </ul>
+            
+        </div>
+        <div class="list">
+            <ul>
+                <li class="listitem">
+                    <div class="itemimage">
+                        <img src="" />
+                        <h3>新闻资讯标题</h3>
+                        <span>3小时前 来自 xgd.xianggangug.com</span>
+                    </div>
+                    <p>东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机</p>
+                    <p><img src="" /></p>
+                    <div class="itembottom">
+                        <button>转发</button>
+                        <button>点赞</button>
+                        <button>关注</button>
+                        <button>更多</button>
+                    </div>
+                </li>
+
+                <li class="listitem">
+                    <div class="itemimage">
+                        <img src="" />
+                        <h3>新闻资讯标题</h3>
+                        <span>3小时前 来自 xgd.xianggangug.com</span>
+                    </div>
+                    <p>东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机</p>
+                    <p><img src="" /></p>
+                    <div class="itembottom">
+                        <button>转发</button>
+                        <button>点赞</button>
+                        <button>关注</button>
+                        <button>更多</button>
+                    </div>
+                </li>
+
+                <li class="listitem">
+                    <div class="itemimage">
+                        <img src="" />
+                        <h3>新闻资讯标题</h3>
+                        <span>3小时前 来自 xgd.xianggangug.com</span>
+                    </div>
+                    <p>东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机</p>
+                    <p><img src="" /></p>
+                    <div class="itembottom">
+                        <button>转发</button>
+                        <button>点赞</button>
+                        <button>关注</button>
+                        <button>更多</button>
+                    </div>
+                </li>
+
+                <li class="listitem">
+                    <div class="itemimage">
+                        <img src="" />
+                        <h3>新闻资讯标题</h3>
+                        <span>3小时前 来自 xgd.xianggangug.com</span>
+                    </div>
+                    <p>东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机</p>
+                    <p><img src="" /></p>
+                    <div class="itembottom">
+                        <button>转发</button>
+                        <button>点赞</button>
+                        <button>关注</button>
+                        <button>更多</button>
+                    </div>
+                </li>
+
+                <li class="listitem">
+                    <div class="itemimage">
+                        <img src="" />
+                        <h3>新闻资讯标题</h3>
+                        <span>3小时前 来自 xgd.xianggangug.com</span>
+                    </div>
+                    <p>东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机</p>
+                    <p><img src="" /></p>
+                    <div class="itembottom">
+                        <button>转发</button>
+                        <button>点赞</button>
+                        <button>关注</button>
+                        <button>更多</button>
+                    </div>
+                </li>
+
+                <li class="listitem">
+                    <div class="itemimage">
+                        <img src="" />
+                        <h3>新闻资讯标题</h3>
+                        <span>3小时前 来自 xgd.xianggangug.com</span>
+                    </div>
+                    <p>东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机</p>
+                    <p><img src="" /></p>
+                    <div class="itembottom">
+                        <button>转发</button>
+                        <button>点赞</button>
+                        <button>关注</button>
+                        <button>更多</button>
+                    </div>
+                </li>
+
+                <li class="listitem">
+                    <div class="itemimage">
+                        <img src="" />
+                        <h3>新闻资讯标题</h3>
+                        <span>3小时前 来自 xgd.xianggangug.com</span>
+                    </div>
+                    <p>东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机</p>
+                    <p><img src="" /></p>
+                    <div class="itembottom">
+                        <button>转发</button>
+                        <button>点赞</button>
+                        <button>关注</button>
+                        <button>更多</button>
+                    </div>
+                </li>
+
+                <li class="listitem">
+                    <div class="itemimage">
+                        <img src="" />
+                        <h3>新闻资讯标题</h3>
+                        <span>3小时前 来自 xgd.xianggangug.com</span>
+                    </div>
+                    <p>东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机东风快递快放假的咖啡机</p>
+                    <p><img src="" /></p>
+                    <div class="itembottom">
+                        <button>转发</button>
+                        <button>点赞</button>
+                        <button>关注</button>
+                        <button>更多</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    
+
+    </div>
+    
+
+    
+    
+    
+  </body>
+</html>
+
+
+<script>
+    var page = 1;
+    var pageSize = 300;
+    var cycle = "t";
+    var code = "sh000001";
+    //dsxConfig.theme.dark.greenColor = "#333";
+
+    //var data = ["20220420,0930,3191.11,1224974000,1.224174E10","20220420,0931,3190.62,226715000,1.452286E10","20220420,0932,3190.46,643220000,2.112785E10","20220420,0933,3187.36,503797000,2.608831E10","20220420,0934,3182.35,526655000,3.12318E10","20220420,0935,3182.35,0,3.12318E10","20220420,0936,3184.64,752857000,3.879268E10","20220420,0937,3185.11,175074000,4.046131E10","20220420,0938,3183.9,422621000,4.487796E10","20220420,0939,3184.66,379659000,4.88427E10","20220420,0940,3182.66,258130000,5.149694E10","20220420,0941,3180.7,500353000,5.625659E10","20220420,0942,3180.89,368432000,5.970919E10","20220420,0943,3181.27,129471000,6.101667E10","20220420,0944,3181.45,411242000,6.515148E10","20220420,0945,3176.48,274751000,6.795147E10","20220420,0946,3176.83,226025000,7.023007E10","20220420,0947,3172.11,319479000,7.321143E10","20220420,0948,3175.51,366199000,7.655629E10","20220420,0949,3175.08,194626000,7.840449E10","20220420,0950,3179.05,124018000,7.975023E10","20220420,0951,3179.05,0,7.975023E10","20220420,0952,3178.13,633341000,8.603958E10","20220420,0953,3179.83,175459000,8.783895E10","20220420,0954,3176.95,210192000,8.984841E10","20220420,0955,3177.59,150225000,9.13857E10","20220420,0956,3175.72,203851000,9.349055E10","20220420,0957,3177.2,229451000,9.592118E10","20220420,0958,3178.23,103621000,9.701231E10","20220420,0959,3175.67,232012000,9.957896E10","20220420,1000,3175.28,236010000,1.020332E11","20220420,1001,3176.4,200050000,1.041091E11","20220420,1002,3172.33,186510000,1.059643E11","20220420,1003,3172.33,0,1.059643E11","20220420,1004,3169.82,373700000,1.096014E11","20220420,1005,3170.67,300810000,1.12664E11","20220420,1006,3170.52,264550000,1.152117E11","20220420,1007,3170.42,19100000,1.154056E11","20220420,1008,3177.81,354970000,1.189481E11","20220420,1009,3178.45,121670000,1.202769E11","20220420,1010,3181.41,217740000,1.225221E11","20220420,1011,3180.99,185450000,1.244444E11","20220420,1012,3180.56,60530000,1.251015E11","20220420,1013,3181.6,234250000,1.277E11","20220420,1014,3180.81,164020000,1.294277E11","20220420,1015,3177.99,157730000,1.311694E11","20220420,1016,3176.69,118910000,1.323382E11","20220420,1017,3179.11,165580000,1.339799E11","20220420,1018,3179.65,79910000,1.347839E11","20220420,1019,3176.37,265290000,1.372301E11","20220420,1020,3175.97,138840000,1.385539E11","20220420,1021,3175.85,161290000,1.401433E11","20220420,1022,3175.91,24400000,1.403952E11","20220420,1023,3173.45,408830000,1.439136E11","20220420,1024,3175.23,125910000,1.451901E11","20220420,1025,3174.17,163450000,1.468467E11","20220420,1026,3174.85,118200000,1.477988E11","20220420,1027,3174.85,0,1.477988E11","20220420,1028,3177.99,268260000,1.507405E11","20220420,1029,3177.99,0,1.507405E11","20220420,1030,3177.99,0,1.507405E11","20220420,1031,3172.0,485430000,1.558105E11","20220420,1032,3173.65,167650000,1.575098E11","20220420,1033,3174.35,92120000,1.584873E11","20220420,1034,3176.88,140490000,1.599464E11","20220420,1035,3178.4,130560000,1.613874E11","20220420,1036,3178.41,111410000,1.626855E11","20220420,1037,3180.41,100010000,1.638412E11","20220420,1038,3178.93,104120000,1.651226E11","20220420,1039,3180.89,111130000,1.663396E11","20220420,1040,3180.46,111710000,1.677072E11","20220420,1041,3180.46,0,1.677072E11","20220420,1042,3180.46,0,1.677072E11","20220420,1043,3178.32,273570000,1.707689E11","20220420,1044,3178.21,137670000,1.721891E11","20220420,1045,3177.54,121260000,1.734507E11","20220420,1046,3177.95,95700000,1.745086E11","20220420,1047,3177.84,95100000,1.75501E11","20220420,1048,3181.06,102910000,1.766372E11","20220420,1049,3182.69,88590000,1.776148E11","20220420,1050,3182.06,115410000,1.788872E11","20220420,1051,3180.11,104480000,1.799661E11","20220420,1052,3179.14,103870000,1.81022E11","20220420,1053,3178.28,78160000,1.8176E11","20220420,1054,3178.69,141360000,1.831696E11","20220420,1055,3180.0,118450000,1.845443E11","20220420,1056,3177.34,129670000,1.858446E11","20220420,1057,3178.75,68870000,1.865914E11","20220420,1058,3180.35,183200000,1.884582E11","20220420,1059,3182.58,91120000,1.895109E11","20220420,1100,3183.54,138310000,1.910127E11","20220420,1101,3184.43,102540000,1.922471E11","20220420,1102,3186.39,104490000,1.934971E11","20220420,1103,3187.05,106590000,1.947873E11","20220420,1104,3186.44,51240000,1.953988E11","20220420,1105,3189.08,127940000,1.968437E11","20220420,1106,3188.31,100350000,1.978858E11","20220420,1107,3188.2,79100000,1.988216E11","20220420,1108,3187.5,76750000,1.997791E11","20220420,1109,3188.81,70980000,2.006553E11","20220420,1110,3190.96,82940000,2.017838E11","20220420,1111,3188.93,113770000,2.031342E11","20220420,1112,3186.15,79970000,2.041463E11","20220420,1113,3186.68,73780000,2.050379E11","20220420,1114,3186.5,31870000,2.054195E11","20220420,1115,3186.37,108190000,2.065468E11","20220420,1116,3186.41,74500000,2.074221E11","20220420,1117,3186.16,60540000,2.080869E11","20220420,1118,3186.1,20530000,2.083302E11","20220420,1119,3187.14,109550000,2.095832E11","20220420,1120,3187.29,41890000,2.100943E11","20220420,1121,3188.19,93450000,2.111687E11","20220420,1122,3187.95,56980000,2.11807E11","20220420,1123,3187.4,83560000,2.127399E11","20220420,1124,3187.82,71070000,2.135671E11","20220420,1125,3189.32,85650000,2.1448E11","20220420,1126,3188.91,49660000,2.150192E11","20220420,1127,3188.75,81430000,2.158865E11","20220420,1128,3187.7,83200000,2.167596E11","20220420,1129,3187.91,45360000,2.172591E11","20220420,1130,3187.23,27750000,2.175679E11","20220420,1300,3188.97,209100000,2.196997E11","20220420,1301,3186.17,104560000,2.209048E11","20220420,1302,3185.33,85920000,2.218887E11","20220420,1303,3185.43,73210000,2.227707E11","20220420,1304,3186.48,113320000,2.240632E11","20220420,1305,3186.24,89600000,2.250855E11","20220420,1306,3184.87,79530000,2.259422E11","20220420,1307,3183.04,94890000,2.269909E11","20220420,1308,3183.27,73950000,2.278585E11","20220420,1309,3183.65,105530000,2.289772E11","20220420,1310,3181.45,124730000,2.30299E11","20220420,1311,3179.94,131290000,2.315645E11","20220420,1312,3181.05,56750000,2.322324E11","20220420,1313,3180.29,104490000,2.334697E11","20220420,1314,3178.97,109020000,2.347234E11","20220420,1315,3180.13,83920000,2.356198E11","20220420,1316,3180.92,88840000,2.366131E11","20220420,1317,3179.38,83260000,2.375276E11","20220420,1318,3179.4,65850000,2.382672E11","20220420,1319,3178.13,101620000,2.39368E11","20220420,1320,3176.22,179350000,2.411213E11","20220420,1321,3174.73,118590000,2.423516E11","20220420,1322,3174.58,112840000,2.435194E11","20220420,1323,3174.1,28230000,2.437946E11","20220420,1324,3173.62,155340000,2.454028E11","20220420,1325,3171.6,143190000,2.467745E11","20220420,1326,3171.6,0,2.467745E11","20220420,1327,3173.37,118340000,2.480006E11","20220420,1328,3173.75,101150000,2.491093E11","20220420,1329,3174.63,104390000,2.503086E11","20220420,1330,3176.52,101760000,2.514724E11","20220420,1331,3176.73,101530000,2.526013E11","20220420,1332,3175.98,79250000,2.534857E11","20220420,1333,3173.13,105260000,2.546221E11","20220420,1334,3172.12,80760000,2.554774E11","20220420,1335,3171.66,68830000,2.561431E11","20220420,1336,3170.75,170220000,2.576606E11","20220420,1337,3170.22,125520000,2.588986E11","20220420,1338,3173.33,156230000,2.605969E11","20220420,1339,3172.3,94920000,2.61527E11","20220420,1340,3171.92,103900000,2.625689E11","20220420,1341,3173.93,104240000,2.637966E11","20220420,1342,3172.56,97200000,2.648002E11","20220420,1343,3171.84,75860000,2.656157E11","20220420,1344,3172.76,103770000,2.667814E11","20220420,1345,3169.5,110540000,2.678786E11","20220420,1346,3166.48,244200000,2.699336E11","20220420,1347,3165.23,185130000,2.71546E11","20220420,1348,3163.94,205120000,2.734033E11","20220420,1349,3164.7,152240000,2.748182E11","20220420,1350,3164.05,83170000,2.75654E11","20220420,1351,3160.96,205960000,2.774601E11","20220420,1352,3161.49,187220000,2.792623E11","20220420,1353,3158.61,194480000,2.810518E11","20220420,1354,3158.61,0,2.810518E11","20220420,1355,3156.68,406310000,2.850976E11","20220420,1356,3157.84,123790000,2.863829E11","20220420,1357,3157.98,96300000,2.873779E11","20220420,1358,3157.98,0,2.873779E11","20220420,1359,3160.28,264840000,2.900381E11","20220420,1400,3158.86,160630000,2.916473E11","20220420,1401,3160.57,108070000,2.927178E11","20220420,1402,3161.64,71440000,2.933839E11","20220420,1403,3160.56,99570000,2.944172E11","20220420,1404,3156.46,147810000,2.959184E11","20220420,1405,3153.67,166760000,2.974141E11","20220420,1406,3153.35,222670000,2.994949E11","20220420,1407,3151.55,116690000,3.005801E11","20220420,1408,3151.75,141320000,3.019787E11","20220420,1409,3151.75,0,3.019787E11","20220420,1410,3152.55,270150000,3.047605E11","20220420,1411,3152.55,104110000,3.058396E11","20220420,1412,3154.45,104540000,3.069683E11","20220420,1413,3155.56,84420000,3.078552E11","20220420,1414,3157.06,126470000,3.091564E11","20220420,1415,3156.87,62580000,3.098423E11","20220420,1416,3154.21,94700000,3.108299E11","20220420,1417,3150.56,172770000,3.126717E11","20220420,1418,3148.83,130930000,3.141105E11","20220420,1419,3148.43,70480000,3.148682E11","20220420,1420,3148.21,95450000,3.159295E11","20220420,1421,3148.72,168110000,3.177649E11","20220420,1422,3148.48,70470000,3.185269E11","20220420,1423,3150.54,151010000,3.201848E11","20220420,1424,3152.04,94160000,3.211951E11","20220420,1425,3149.0,99030000,3.222781E11","20220420,1426,3149.79,77390000,3.231087E11","20220420,1427,3150.07,74800000,3.239052E11","20220420,1428,3149.78,129960000,3.253138E11","20220420,1429,3147.14,140000000,3.268306E11","20220420,1430,3145.72,174810000,3.285825E11","20220420,1431,3143.51,175510000,3.303366E11","20220420,1432,3142.45,126510000,3.31623E11","20220420,1433,3142.37,148820000,3.331665E11","20220420,1434,3144.86,204690000,3.352642E11","20220420,1435,3145.65,147680000,3.367514E11","20220420,1436,3146.15,85530000,3.375631E11","20220420,1437,3146.17,137440000,3.389727E11","20220420,1438,3147.18,123050000,3.402487E11","20220420,1439,3148.91,143520000,3.416831E11","20220420,1440,3150.44,121060000,3.429584E11","20220420,1441,3149.37,156890000,3.446051E11","20220420,1442,3147.39,152380000,3.462512E11","20220420,1443,3147.65,115980000,3.475424E11","20220420,1444,3146.89,105780000,3.48764E11","20220420,1445,3148.86,134390000,3.502711E11","20220420,1446,3149.82,132710000,3.517101E11","20220420,1447,3149.82,0,3.517101E11","20220420,1448,3151.02,246530000,3.544247E11","20220420,1449,3151.67,142110000,3.559439E11","20220420,1450,3152.36,154940000,3.575768E11","20220420,1451,3151.92,127190000,3.589227E11","20220420,1452,3152.81,204950000,3.611434E11","20220420,1453,3152.63,146480000,3.6265E11","20220420,1454,3152.83,174700000,3.64433E11","20220420,1455,3151.36,242820000,3.669842E11","20220420,1456,3151.42,190930000,3.689774E11","20220420,1457,3151.42,0,3.689774E11","20220420,1458,3151.42,0,3.689774E11","20220420,1459,3151.42,0,3.689774E11","20220420,1500,3151.22,411070000,3.731831E11"];
+    
+    //console.log(dsxConfig);
+    var c=document.getElementById("kline"); 
+    var kline = new dsxKline({
+        element:c,
+        chartType:dsxConfig.chartType.timeSharing,
+        //theme:"dark",
+        //candleType:dsxConfig.candleType.solid,
+        zoomLockType:dsxConfig.zoomLockType.right,
+        //isShowKlineTipPannel:false,
+        lastClose:2930.23,
+        sideHeight:80,
+        paddingBottom:10,
+        autoSize:true,
+        // debug:true,
+        main:["MA"], // 主图指标
+        sides:["VOL"], // 副图显示指标(两个副图，第一个显示MACD，第二个显示KDJ)
+        // 初始化并开始加载数据
+        onLoading:function(o){
+            //console.log("o.chartType="+o.chartType);
+            page = 1;
+            datas = [];
+            if(o.chartType==dsxConfig.chartType.candle) getDay();
+            if(o.chartType==dsxConfig.chartType.timeSharing) getQuote(code,o);
+            if(o.chartType==dsxConfig.chartType.timeSharing5) getQuote(code,o);
+        },
+        // 滚动到最左边的时候加载下一页数据
+        nextPage:function(data,index){
+            //console.log("滚动到左边");
+            // 继续加载下一页数据
+            if(kline.chartType==dsxConfig.chartType.candle) getDay();
+        },
+        // 十字线滑动数据回调
+        onCrossing:function(data,index){
+              console.log(index,data);
+        },
+        // 完成一帧数据更新
+        updateComplate:function(){
+            console.log("完成一帧数据更新");
+        },
+        
+    });
+
+    function tab(i){
+        if(i<=2) kline.chartType = i;
+        if(i>2) kline.chartType = 2;
+        if(i==0) cycle = "timeline";
+        if(i==1) cycle = "timeline5";
+        if(i==2) cycle = "day";
+        if(i==3) cycle = "week";
+        if(i==4) cycle = "month";
+        if(i==5) cycle = "m1";
+
+        kline.startLoading();
+    }
+    var datas = [];
+    function getDay(){
+        if(cycle.startsWith("m")&&!cycle.startsWith("month")){
+        if(code.startsWith("hk")||code.startsWith("us")) {
+            EasyLayer.closeLoading();
+            kline.finishLoading();
+            return;
+        }
+        qqhq.getMinLine(code,cycle,320,function(data){
+            if(data.length>0){
+                //d.data = [];
+                if(page<=1) datas = data;
+                if(page>1) datas = data.concat(datas);
+                console.log(datas);
+                kline.update({
+                    sides:kline.chartType<=1?["VOL"]:["VOL","MACD","KDJ"],
+                    sideHeight:40,
+                    page:page,
+                    datas:datas,
+                });
+                page++;
+            }
+            kline.finishLoading();
+        },function(error){
+            kline.finishLoading();
+        });
+    }else{
+        qqhq.getLine(code,cycle,"","",320,"qfq",function(data){
+            if(data.length>0){
+                //d.data = [];
+                if(page<=1) datas = data;
+                if(page>1) datas = data.concat(datas);
+                console.log(datas);
+                kline.update({
+                    sides:kline.chartType<=1?["VOL"]:["VOL","MACD","KDJ"],
+                    sideHeight:40,
+                    page:page,
+                    datas:datas,
+                });
+                page++;
+            }
+            kline.finishLoading();
+        },function(error){
+            kline.finishLoading();
+        });
+    }
+
+        // var url = "http://120.27.246.191:8080/v1/kline.php?code="+code+"&cycle="+cycle+"&fq=data&page="+page+"&pageSize="+pageSize+"&dangfm=true";
+        // console.log("请求K线:"+url);
+        // new dsxHttp({
+        //     url:url,
+        //     success:function(data){
+        //         var d = JSON.parse(data);
+        //         if(d.data){
+        //             if(d.data.length>0){
+        //                 //d.data = [];
+        //                 if(page<=1) datas = d.data;
+        //                 if(page>1) datas = d.data.concat(datas);
+        //                 //console.log(datas);
+        //                 kline.update({
+        //                     sideHeight:40,
+        //                     sides:kline.chartType<=1?["VOL"]:["VOL","MACD","KDJ"],
+        //                     page:page,
+        //                     datas:datas,
+        //                 });
+        //                 page++;
+        //             }else{
+        //                 console.log("滚动到尽头");
+        //                 kline.scrollThenend();
+        //             }
+        //         }
+        //         //kline.finishLoading();
+        //     },
+        //     fail:function(){
+               
+        //     }
+        // })
+    }
+
+    function getTimeLine(o){
+        qqhq.getTimeLine(code,function(data){
+            //var d = JSON.parse(data);
+            console.log(data);
+            //d.data = [];
+            kline.update({
+                chartType:dsxConfig.chartType.timeSharing,
+                //theme:"dark",
+                candleType:dsxConfig.candleType.hollow,
+                zoomLockType:dsxConfig.zoomLockType.right,
+                isShowKlineTipPannel:false,
+                sideHeight:120,
+                sides:kline.chartType<=1?["VOL"]:["VOL","MACD","KDJ"],
+                datas:data,
+            });
+            kline.finishLoading();
+        },function(error){
+            kline.finishLoading();
+        })
+
+        // new dsxHttp({
+        //     url:"http://120.27.246.191:8080/v1/kline.php?code="+code+"&cycle=timeline&fq=data&dangfm=true",
+        //     success:function(data){
+        //         var d = JSON.parse(data);
+        //         //console.log(d.data);
+        //         //d.data = [];
+        //         kline.update({
+        //             chartType:dsxConfig.chartType.timeSharing,
+        //             //theme:"dark",
+        //             candleType:dsxConfig.candleType.hollow,
+        //             zoomLockType:dsxConfig.zoomLockType.right,
+        //             isShowKlineTipPannel:false,
+        //             sides:kline.chartType<=1?["VOL"]:["VOL","MACD","KDJ"],
+        //             sideHeight:120,
+        //             datas:d.data,
+        //         })
+        //     },
+        //     fail:function(){
+        //         kline.finishLoading();
+        //     }
+        // })
+    }
+
+    function getTimeLine5(o){
+        qqhq.getFdayLine(code,function(data){
+            //var d = JSON.parse(data);
+            // console.log(data);
+            //d.data = [];
+            kline.update({
+                lastClose:parseFloat(data.lastClose),
+                chartType:dsxConfig.chartType.timeSharing,
+                //theme:"dark",
+                // candleType:dsxConfig.candleType.hollow,
+                // zoomLockType:dsxConfig.zoomLockType.right,
+                sideHeight:120,
+                isShowKlineTipPannel:false,
+                sides:kline.chartType<=1?["VOL"]:["VOL","MACD","KDJ"],
+                datas:data.data,
+            });
+            kline.finishLoading();
+        },function(error){
+            kline.finishLoading();
+        })
+        
+        // new dsxHttp({
+        //     url:"http://120.27.246.191:8080/v1/kline.php?code="+code+"&cycle=timeline5&fq=data&dangfm=true",
+        //     success:function(data){
+        //         var d = JSON.parse(data);
+        //         // 取第一个数据为昨日收盘价
+        //         d = d.data;
+        //         var first = d.splice(0,1)[0];
+        //         console.log(first);
+        //         var f = first.split(",");
+        //         var lastClose = f[2];
+        //         //console.log(d.data);
+        //         kline.update({
+        //             lastClose:parseFloat(lastClose),
+        //             chartType:dsxConfig.chartType.timeSharing5,
+        //             //theme:"dark",
+        //             // candleType:dsxConfig.candleType.hollow,
+        //             // zoomLockType:dsxConfig.zoomLockType.right,
+        //             sideHeight:120,
+        //             isShowKlineTipPannel:false,
+        //             sides:kline.chartType<=1?["VOL"]:["VOL","MACD","KDJ"],
+        //             datas:d,
+        //         })
+        //     },
+        //     fail:function(){
+                
+        //     }
+        // })
+    }
+
+    function getQuote(code,o){
+        qqhq.getQuote(code,function(data){
+            let d =data[0];
+            kline.lastClose = d.lastClose;
+            if(o.chartType==dsxConfig.chartType.timeSharing) getTimeLine(o);
+            if(o.chartType==dsxConfig.chartType.timeSharing5) getTimeLine5(o);
+        },function(error){
+
+        });
+        
+        // new dsxHttp({
+        //     url:"http://120.27.246.191:8080/v1/quotes.php?code="+code+"&dangfm=true",
+        //     success:function(data){
+        //         var d = JSON.parse(data);
+        //         d = d.data[0];
+        //         if(!d) return;
+        //         refreshQuote(d);
+        //         //console.log(d);
+        //         kline.lastClose = d.closePrice;
+        //         if(o.chartType==dsxConfig.chartType.timeSharing) getTimeLine(o);
+        //         if(o.chartType==dsxConfig.chartType.timeSharing5) getTimeLine5(o);
+        //     },
+        //     fail:function(){
+
+        //     }
+        // })
+    }
+
+    function getQuoteRefresh(code){
+        if(!kline) return;
+        qqhq.getQuote(code,function(data){
+            let d =data[0];
+            refreshQuote(d);
+
+            var item = d.date.replace("-","").replace("-","")+","+d.time.replace(":","").substr(0,4)+","+d.price+","+(d.type=="1"?(parseFloat(d.vol)):d.vol)+","+d.volAmount;
+            if(kline.chartType==dsxConfig.chartType.candle){
+                if(cycle.startsWith("min1")){
+                    item = d.date.replace("-","").replace("-","")+","+d.time.replace(":","").substr(0,4)+","+d.price+","+d.price+","+d.price+","+d.price+","+(parseFloat(d.vol))+","+d.volAmount;
+                }else{
+                    item = d.date.replace("-","").replace("-","")+","+d.open+","+d.high+","+d.low+","+d.price+","+(parseFloat(d.vol))+","+d.volAmount;
+                }
+            }
+            //console.log(item);
+            var c = "t";
+            if(cycle=="day") c = "d";
+            if(cycle=="week") c = "w";
+            if(cycle=="month") c = "m";
+            if(cycle=="year") c = "y";
+            if(cycle=="min1") c = "m1";
+            if(cycle=="timeline") c = "t";
+            if(cycle=="timeline5") c = "t5";
+            //console.log(cycle+"_"+item);
+            kline.refreshLastOneData(item,c);
+
+        },function(error){
+
+        });
+
+        // new dsxHttp({
+        //     url:"http://120.27.246.191:8080/v1/quotes.php?code="+code+"&dangfm=true",
+        //     success:function(data){
+        //         var d = JSON.parse(data);
+        //         d = d.data[0];
+        //         if(!d) return;
+        //         refreshQuote(d);
+        //         //kline.lastClose = d.closePrice;
+                
+        //         var item = d.lastDate.replace("-","").replace("-","")+","+d.lastTime.replace(":","").substr(0,4)+","+d.price+","+(d.type=="1"?(parseFloat(d.volumn)):d.volumn)+","+d.volumnPrice;
+        //         if(kline.chartType==dsxConfig.chartType.candle){
+        //             if(cycle.startsWith("min1")){
+        //                 item = d.lastDate.replace("-","").replace("-","")+","+d.lastTime.replace(":","").substr(0,4)+","+d.price+","+d.price+","+d.price+","+d.price+","+(parseFloat(d.volumn))+","+d.volumnPrice;
+        //             }else{
+        //                 item = d.lastDate.replace("-","").replace("-","")+","+d.openPrice+","+d.highPrice+","+d.lowPrice+","+d.price+","+(parseFloat(d.volumn))+","+d.volumnPrice;
+        //             }
+        //         }
+        //         //console.log(item);
+        //         var c = "t";
+        //         if(cycle=="day") c = "d";
+        //         if(cycle=="week") c = "w";
+        //         if(cycle=="month") c = "m";
+        //         if(cycle=="year") c = "y";
+        //         if(cycle=="min1") c = "m1";
+        //         if(cycle=="timeline") c = "t";
+        //         if(cycle=="timeline5") c = "t5";
+        //         //console.log(cycle+"_"+item);
+        //         kline.refreshLastOneData(item,c);
+        //     },
+        //     fail:function(){
+
+        //     }
+        // })
+    }
+
+    /**
+     * "lastTime": "15:00:10",
+        "code": "sh000001",
+        "volumnPrice": "519833300000",
+        "openPrice": "3303.71",
+        "volumn": "46628560000",
+        "circulationValue": "0",
+        "type": "1",
+        "peRatio": "0",
+        "lowPrice": "3147.68",
+        "price": "3256.39",
+        "highPrice": "3321.48",
+        "sell_5_s": "0",
+        "sell_2_s": "0",
+        "sell_1_s": "816520700",
+        "sell_4_s": "0",
+        "lastDate": "2022-03-09",
+        "sell_3_s": "0",
+        "buy_5": "0",
+        "totalValue": "0",
+        "buy_1": "0",
+        "isStop": "0",
+        "buy_2": "0",
+        "buy_3": "0",
+        "buy_4": "0",
+        "buy_5_s": "0",
+        "buy_3_s": "0",
+        "buy_4_s": "0",
+        "buy_1_s": "930290300",
+        "swing": "0",
+        "buy_2_s": "0",
+        "sell_5": "0",
+        "name": "上证指数",
+        "sell_4": "0",
+        "turnoverRate": "0",
+        "sell_3": "0",
+        "sell_2": "0",
+        "closePrice": "3293.53",
+        "cityNetRate": "0",
+        "sell_1": "0"
+    */
+    function refreshQuote(data){
+        Object.keys(data).forEach(function(key,index){
+            var value = data[key];
+            //console.log(key+"="+value);
+            setDomValue(key,value,data.lastClose);
+        });
+        document.querySelector(".title .price").innerHTML = data.price;
+        var d = (data.price - data.lastClose);
+        var r = d / data.lastClose * 100;
+        document.querySelector(".title .changeRatio").innerHTML = d.toFixed(2)+" / "+r.toFixed(2) + "%";
+        if(r>0){
+            document.querySelector(".title").style.color = "red";
+        }
+        if(r==0){
+            document.querySelector(".title").style.color = "#333";
+        }
+        if(r<0){
+            document.querySelector(".title").style.color = "green";
+        }
+
+        // 标题
+        document.querySelector(".navbar b").innerHTML = data.name;
+        document.querySelector(".navbar span").innerHTML = data.code.toUpperCase()+" "+data.date+" "+data.time +" "+(data.time.replace(":","").substr(0,4)>=1500?"已收盘":"交易中");
+    }
+
+    function setDomValue(key,value,close){
+        var dom =  document.querySelector(".intro ."+key+" b");
+        if(dom){
+            //console.log(dom);
+            dom.innerHTML = value==0?"-":setNumber(value);
+            if(key=="high" || key=="low" || key=="lastClose"){
+                if(parseFloat(value)>parseFloat(close)){
+                    dom.style.color = "red";
+                }
+                if(parseFloat(value)==parseFloat(close)){
+                    dom.style.color = "#333";
+                }
+                if(parseFloat(value)<parseFloat(close)){
+                    dom.style.color = "green";
+                }
+            }
+            
+        }
+    }
+    function setNumber(number){
+        number = parseFloat(number);
+        var r = number;
+        if(number>10000) r = (number / 10000).toFixed(2) +"万";
+        if(number>100000000) r = (number / 100000000).toFixed(0) +"亿";
+        return r;
+    }
+
+    setInterval(function(){
+       getQuoteRefresh(code);
+    },5000);
+    getQuoteRefresh(code);
+</script>
