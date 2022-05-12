@@ -40,9 +40,9 @@ qqhq.getQuote = function(code,success,fail){
                         high:rs[33],
                         low:rs[34],
                         vol:rs[6],
-                        volAmount:rs[37],
-                        date:rs[30],
-                        time:rs[30],
+                        volAmount:rs[37]*10000,
+                        date:rs[30].replaceAll("-","").substring(0,8),
+                        time:rs[30].replaceAll("-","").substring(8),
                         change:rs[31],
                         changeRatio:rs[32]
                     }
