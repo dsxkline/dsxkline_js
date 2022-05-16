@@ -1,5 +1,8 @@
 # 大师兄K线图
 纯JS(ES5)语言进行开发，几乎完美适配所有浏览器平台(ie678除外)，移动端电脑端混合开发媲美原生体验！
+## 预览
+https://user-images.githubusercontent.com/105279193/168623961-a575f974-5586-474a-a682-b39281d4975f.mp4
+
 ## 官方网站
 http://www.dsxkline.com
 
