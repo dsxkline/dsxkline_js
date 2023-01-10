@@ -2,7 +2,7 @@
 纯JS(ES5)语言进行开发，几乎完美适配所有浏览器平台(ie678除外)，移动端电脑端混合开发媲美原生体验！
 ## 预览
 <img src="https://user-images.githubusercontent.com/105279193/169232280-ce4b24d2-3b9d-47ac-9f10-4eaaa5122ff7.gif" width=320>
-
+<img src="https://user-images.githubusercontent.com/105279193/211478784-09c197a6-be5b-4869-8170-3af8e8cf6ffc.jpeg" width=320>
 ![example](https://user-images.githubusercontent.com/105279193/169196992-9906ec38-f8a9-447c-9a42-e1c10129ac8f.gif)
  
 
