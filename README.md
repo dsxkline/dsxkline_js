@@ -1,9 +1,28 @@
 # 大师兄K线图
 纯JS(ES5)语言进行开发，几乎完美适配所有浏览器平台(ie678除外)，移动端电脑端混合开发媲美原生体验！
+支持主流开发平台 android,ios,flutter,web,h5,c#等
+
+SDK:
+
+web:https://github.com/dsxkline/dsxkline_js
+
+ios:https://github.com/dsxkline/dsxkline_iphone
+
+android:https://github.com/dsxkline/dsxkline_android
+
+flutter:https://github.com/dsxkline/dsxkline_flutter
+
+C#:https://github.com/dsxkline/dsxkline_net
+
+h5:http://www.dsxkline.com/demo/dsxkline/index.html
+
 ## 预览
 <img src="https://user-images.githubusercontent.com/105279193/169232280-ce4b24d2-3b9d-47ac-9f10-4eaaa5122ff7.gif" width=320>
+
 <img src="https://user-images.githubusercontent.com/105279193/211478784-09c197a6-be5b-4869-8170-3af8e8cf6ffc.jpeg" width=320>
-![example](https://user-images.githubusercontent.com/105279193/169196992-9906ec38-f8a9-447c-9a42-e1c10129ac8f.gif)
+
+<img src="https://user-images.githubusercontent.com/105279193/169196992-9906ec38-f8a9-447c-9a42-e1c10129ac8f.gif" width=620>
+
  
 
 ## 官方网站
@@ -125,35 +144,89 @@ demo: http://www.dsxkline.com/demo/dsxkline/index.html
     // 指标配置
     dsxConfig.index = {
         VOL:{
+            // 显示名称
             title:"成交量",
+            // 参数配置值
             value:{VOL:0,MA5:5,MA10:10},
-            draw:{VOL:{model:"column",color:"CLOSE",hiddenTitle:true},MA5:{model:"line",color:"#FFA500"},MA10:{model:"line",color:"#87CEFA"}}
+            // 画线配置
+            draw:{VOL:{model:"column",color:"CLOSE",hiddenTitle:true},MA5:{model:"line",color:"#FFA500"},MA10:{model:"line",color:"#87CEFA"}},
+            // 支持的图形
+            chartType:[dsxConfig.chartType.timeSharing,dsxConfig.chartType.timeSharing5,dsxConfig.chartType.candle],
+            // 支持的图表位置 主图 main，副图 sides
+            location:['sides']
+
         },
         TMA:{
             title:"",
             value:{"均价":1},
             draw:{ "均价":{model:"line",color:"#FFA500"},"新值":{model:"text",color:"",colorValue:0}},
+            chartType:[dsxConfig.chartType.timeSharing,dsxConfig.chartType.timeSharing5],
+            location:['main']
         },
         MA:{
             title:"均线",
             value:{ MA5:5, MA10:10, MA30:30,MA60:60},
             draw:{ MA5:{model:"line",color:"#FFA500"}, MA10:{model:"line",color:"#87CEFA"}, MA30:{model:"line",color:"#BA55D3"},MA60:{model:"line",color:"#808000"},},
+            chartType:[dsxConfig.chartType.timeSharing,dsxConfig.chartType.timeSharing5,dsxConfig.chartType.candle],
+            location:['main']
         },
         MACD:{
             title:"MACD(26,9,12)",
             value:{DIFF:0,DEA:0,MACD:0,long:26,d:9,short:12},
             draw:{DIFF:{model:"line",color:"#FFA500"},DEA:{model:"line",color:"#87CEFA"}, MACD:{model:"column",color:"#BA55D3"}},
+            chartType:[dsxConfig.chartType.timeSharing,dsxConfig.chartType.timeSharing5,dsxConfig.chartType.candle],
+            location:['sides']
         },
         KDJ:{
             title:"KDJ(9,3,3)",
             value:{K:9,D:3,J:3},
             draw:{K:{model:"line",color:"#FFA500"},D:{model:"line",color:"#87CEFA"},J:{model:"line",color:"#BA55D3"}},
+            chartType:[dsxConfig.chartType.candle],
+            location:['sides']
         },
         BOLL:{
             title:"BOLL(20,2)",
             value:{UP:0,MID:0,LOW:0,N:20,M:2},
             draw:{UP:{model:"line",color:"#FFA500"},MID:{model:"line",color:"#87CEFA"}, LOW:{model:"line",color:"#BA55D3"}},
-        }
+            chartType:[dsxConfig.chartType.candle],
+            location:['main']
+        },
+        RSI:{
+            title:"RSI(6,12,24)",
+            value:{RSI6:6,RSI12:12,RSI24:24},
+            draw:{RSI6:{model:"line",color:"#FFA500"},RSI12:{model:"line",color:"#87CEFA"}, RSI24:{model:"line",color:"#BA55D3"}},
+            chartType:[dsxConfig.chartType.timeSharing,dsxConfig.chartType.timeSharing5,dsxConfig.chartType.candle],
+            location:['sides']
+        },
+        WR:{
+            title:"WR(6,10)",
+            value:{WR6:6,WR10:10},
+            draw:{WR6:{model:"line",color:"#FFA500"},WR10:{model:"line",color:"#87CEFA"}},
+            chartType:[dsxConfig.chartType.candle],
+            location:['sides']
+        },
+        BIAS:{
+            title:"BIAS(6,12,24)",
+            value:{BIAS6:6,BIAS12:12,BIAS24:24},
+            draw:{BIAS6:{model:"line",color:"#FFA500"},BIAS12:{model:"line",color:"#87CEFA"}, BIAS24:{model:"line",color:"#BA55D3"}},
+            chartType:[dsxConfig.chartType.candle],
+            location:['sides']
+        },
+        CCI:{
+            title:"CCI(14)",
+            value:{CCI14:14},
+            draw:{CCI14:{model:"line",color:"#FFA500"}},
+            chartType:[dsxConfig.chartType.candle],
+            location:['sides']
+        },
+        PSY:{
+            title:"PSY(12,6)",
+            value:{PSY:12,PSYMA:6},
+            draw:{PSY:{model:"line",color:"#FFA500"},PSYMA:{model:"line",color:"#87CEFA"}},
+            chartType:[dsxConfig.chartType.candle],
+            location:['sides']
+        },
+
     }
 #### 主题配置
     // 主题配置
