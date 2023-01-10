@@ -27,6 +27,9 @@ h5:http://www.dsxkline.com/demo/dsxkline/index.html
 
 <img src="https://user-images.githubusercontent.com/105279193/169196992-9906ec38-f8a9-447c-9a42-e1c10129ac8f.gif" width=620>
 
+完整的股票金融App demo可参考 http://www.dsxkline.com/cloudstrategy/
+
+<img src="http://www.dsxkline.com/cloudstrategy/1.png">
  
 
 ## 官方网站
